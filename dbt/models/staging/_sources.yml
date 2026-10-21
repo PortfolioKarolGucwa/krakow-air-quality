@@ -5,8 +5,7 @@ sources:
     description: >
       Append-only raw layer written by the Python extractor (`src/aq_pipeline`). Every row
       is one source record stored verbatim as JSON (`record_json`) plus load metadata.
-      On DuckDB the tables are read directly from partitioned Parquet files; on
-      Databricks the same names resolve to Delta tables in schema `raw`.
+      DuckDB reads the tables directly from the partitioned Parquet files.
     schema: raw
     config:
       meta:

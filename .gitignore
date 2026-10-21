@@ -28,16 +28,8 @@ data/sample/
 
 # Secrets
 .env
-.databrickscfg
 
 # OS / editors
 .DS_Store
 .idea/
 .vscode/
-
-# Local Spark (spark_local dbt target)
-metastore_db/
-derby.log
-spark-warehouse/
-warehouse/spark-warehouse/
-dbt/target_spark/

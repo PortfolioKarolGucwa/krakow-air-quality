@@ -22,7 +22,7 @@
 <g id="clust3" class="cluster">
 <title>cluster_dbt</title>
 <path fill="#fcfcfb" stroke="#e1e0d9" d="M62,-162C62,-162 461,-162 461,-162 467,-162 473,-168 473,-174 473,-174 473,-513 473,-513 473,-519 467,-525 461,-525 461,-525 62,-525 62,-525 56,-525 50,-519 50,-513 50,-513 50,-174 50,-174 50,-168 56,-162 62,-162"/>
-<text text-anchor="middle" x="261.5" y="-511.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#52514e">dbt Core &#160;(DuckDB · Databricks · Spark)</text>
+<text text-anchor="middle" x="261.5" y="-511.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#52514e">dbt Core &#160;(DuckDB)</text>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_out</title>
@@ -221,7 +221,7 @@
 <polyline fill="none" stroke="#c3c2b7" points="311.5,-490 305.5,-490 "/>
 <text text-anchor="middle" x="185" y="-481.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">tests: not_null · unique · accepted_values</text>
 <text text-anchor="middle" x="185" y="-469.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">ranges · relationships · freshness</text>
-<text text-anchor="middle" x="185" y="-457.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">no_isolated_spikes · unit tests</text>
+<text text-anchor="middle" x="185" y="-457.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">no_isolated_spikes · max_hourly_change</text>
 </g>
 <!-- tests&#45;&gt;int -->
 <g id="edge11" class="edge">
@@ -260,7 +260,7 @@
 <polyline fill="none" stroke="#c3c2b7" points="642,-814 646,-814 646,-810 642,-810 "/>
 <polyline fill="none" stroke="#c3c2b7" points="642,-790 646,-790 646,-786 642,-786 "/>
 <text text-anchor="middle" x="733" y="-803.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">GitHub Actions</text>
-<text text-anchor="middle" x="733" y="-791.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">CI · daily 05:17 UTC · backfill</text>
+<text text-anchor="middle" x="733" y="-791.2" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#0b0b0b">CI · daily 05:17 UTC</text>
 </g>
 <!-- gha&#45;&gt;extract -->
 <g id="edge18" class="edge">

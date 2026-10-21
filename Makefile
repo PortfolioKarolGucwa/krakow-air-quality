@@ -6,7 +6,7 @@ DBT_ARGS = --project-dir dbt --profiles-dir dbt
 SAMPLE_VARS = --vars '{raw_path: data/sample/raw}'
 
 .PHONY: help install deps test lint extract dbt-build docs export analysis pipeline \
-        demo demo-data demo-build dashboard demo-dashboard screenshots spark-check clean
+        demo demo-data demo-build dashboard demo-dashboard screenshots clean
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -64,11 +64,5 @@ screenshots:     ## README images (dashboard must be running on :8501)
 	DUCKDB_PATH=warehouse/demo.duckdb $(DBT) docs generate $(DBT_ARGS) $(SAMPLE_VARS) --static
 	python scripts/take_screenshots.py --dashboard http://localhost:8501
 
-spark-check:     ## build the project on local Spark (Databricks dialect); needs Java + requirements-spark.txt
-	python scripts/register_spark_raw.py --raw-dir data/sample/raw
-	TZ=UTC $(DBT) build $(DBT_ARGS) --target spark_local --exclude "test_type:unit"
-	TZ=UTC $(DBT) test $(DBT_ARGS) --target spark_local --select "test_type:unit"
-
 clean:
-	rm -rf dbt/target dbt/target_spark dbt/dbt_packages dbt/logs logs warehouse/*.duckdb \
-	       warehouse/spark-warehouse metastore_db derby.log data/sample
+	rm -rf dbt/target dbt/dbt_packages dbt/logs logs warehouse/*.duckdb data/sample

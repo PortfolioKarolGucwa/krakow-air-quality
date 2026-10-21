@@ -23,13 +23,13 @@ digraph architecture {
   raw [label="Raw layer\ndata/raw/<table>/ingestion_date=…/*.parquet\nrecord_json + ingested_at + batch_id", shape=cylinder, fillcolor="#f0efec"];
 
   subgraph cluster_dbt {
-    label="dbt Core  (DuckDB · Databricks · Spark)"; fontcolor="#52514e"; color="#e1e0d9"; style="rounded";
+    label="dbt Core  (DuckDB)"; fontcolor="#52514e"; color="#e1e0d9"; style="rounded";
     stg  [label="staging\nparse JSON · types\nlocal / CET → UTC"];
     int  [label="intermediate\nversioning & dedup\nvalidation · weather join"];
     core [label="marts\nfct hourly / daily\ndim station · date · pollutant", fillcolor="#cde2fb"];
     dq   [label="dq\nrejected records\nmonthly quality report"];
     ana  [label="analysis\nheating seasons · coal ban\nweekly profile · weather"];
-    tests [label="tests: not_null · unique · accepted_values\nranges · relationships · freshness\nno_isolated_spikes · unit tests", shape=note, fillcolor="#fff7e6"];
+    tests [label="tests: not_null · unique · accepted_values\nranges · relationships · freshness\nno_isolated_spikes · max_hourly_change", shape=note, fillcolor="#fff7e6"];
     stg -> int -> core -> ana;
     {rank=same; core; dq;}
     int -> dq;
@@ -43,7 +43,7 @@ digraph architecture {
     docs    [label="dbt docs + lineage\nGitHub Pages"];
   }
 
-  gha [label="GitHub Actions\nCI · daily 05:17 UTC · backfill", shape=component, fillcolor="#f0efec"];
+  gha [label="GitHub Actions\nCI · daily 05:17 UTC", shape=component, fillcolor="#f0efec"];
 
   {gios_cur gios_arch gios_zip meteo} -> extract;
   extract -> raw;

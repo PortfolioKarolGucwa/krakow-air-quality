@@ -50,9 +50,7 @@ emissions, COVID in 2020), so treat this as "consistent with" rather than "cause
 | Part | State |
 |---|---|
 | Extraction (GIOŚ API v1, yearly packages, Open-Meteo) | First full run on real data on 2026-10-20: 2015–2025 from the yearly packages, 2026 and one gap in 2022 from the archival API, daily increment from the current API. Unit tests use mocked responses. |
-| dbt on DuckDB | `dbt build` passes: 20 models, 111 data tests, 5 unit tests |
-| dbt on Spark (Databricks SQL dialect) | Builds and passes unit tests on local Spark 3.5, results match DuckDB; checked in CI |
-| Databricks Job / Asset Bundle | Written but not deployed yet, see [databricks/README.md](databricks/README.md) |
+| dbt on DuckDB | `dbt build` passes: 20 models, 111 data tests |
 | Screenshots | Real GIOŚ data |
 
 ## Architecture
@@ -198,7 +196,6 @@ daily workflow publishes it to GitHub Pages.
 | Source freshness | warn after 30 h, error after 54 h |
 | Custom generic | `no_isolated_spikes` (error on facts, warning on raw staging), `max_hourly_change` (warning), both in `dbt/tests/generic` |
 | Singular | daily fact matches the hourly one; nothing from the future; exceedances only on complete days; DQ report adds up (valid + rejected + missing = expected) |
-| Unit tests | time-zone conversion (summer, winter, the repeated autumn hour), source priority, each validation rule, the 18-hour rule |
 
 Failing rows are stored in the `test_failures` schema (`store_failures`), so I can query
 them instead of reading logs. On the real data the warnings are mostly what you'd expect:
@@ -248,32 +245,21 @@ station · PM against temperature and wind · weekday × hour heatmap · days ab
 
 | Workflow | Trigger | Steps |
 |---|---|---|
-| `ci.yml` | push, PR | ruff, pytest, `dbt build` on synthetic data (DuckDB) and on local Spark |
+| `ci.yml` | push, PR | ruff, pytest, `dbt build` on synthetic data |
 | `daily_pipeline.yml` | every day 05:17 UTC, manual | `aq daily` → commit raw → freshness → `dbt build` → export marts → regression → commit marts → dbt docs to Pages |
-| `backfill.yml` | manual | archival API or weather backfill, resumable, commits after every run |
 
 Raw data is committed before dbt runs, so a failing test never costs me downloaded data.
-The two data workflows share a concurrency group and never write at the same time.
+Two runs of the daily workflow never write at the same time (concurrency group).
 
 One-time GitHub setup: *Settings → Actions → General → Workflow permissions → Read and
 write*, and *Settings → Pages → Source: GitHub Actions*.
 
-## Databricks version
-
-A lot of data job ads in Kraków mention Databricks, so I made the same project run there
-too. [databricks/](databricks/) has an Asset Bundle for the Free Edition: a PySpark
-notebook loads the raw Parquet into Delta tables, then the same dbt models run through
-`dbt-databricks` as a Databricks Job. The engine-specific SQL (JSON extraction, time
-zones, weekday numbers, safe casts) sits in dispatched macros in `dbt/macros/cross_db.sql`,
-and CI builds the whole project on Spark so I notice when I write DuckDB-only SQL.
-
 ## Open questions
 
 * **The repeated autumn hour.** When clocks go back, local time has the same hour twice.
-  It maps to one UTC hour and one reading is dropped as a duplicate (unit test
-  `staging_autumn_dst_hour_maps_to_one_utc_hour`). DuckDB and Spark resolve that hour
-  differently, so this one test runs on DuckDB only. It only affects the last three days
-  of data anyway: the yearly files don't have the problem and take priority.
+  It maps to one UTC hour and one reading is dropped as a duplicate. It only affects the
+  last three days of data anyway: the yearly files don't have the problem and take
+  priority.
 * **Districts** (`dbt/seeds/station_districts.csv`) come from reverse geocoding the
   station coordinates against OpenStreetMap. Al. Krasińskiego sits right on the border
   between Zwierzyniec and Stare Miasto, and OSM puts it in Zwierzyniec.
@@ -291,12 +277,11 @@ and CI builds the whole project on Spark so I notice when I write DuckDB-only SQ
 ├── dbt/                    dbt project (models, macros, seeds, tests, profiles)
 ├── analysis/               regression for the ban effect
 ├── dashboard/app.py        Streamlit dashboard
-├── databricks/             Asset Bundle + PySpark notebooks
-├── scripts/                screenshots, Spark table registration
+├── scripts/                README screenshots
 ├── data/raw/               raw layer (committed by the daily workflow)
 ├── data/marts/             Parquet exports for the dashboard
 ├── docs/                   architecture diagram, screenshots, analysis output
-└── .github/workflows/      CI, daily pipeline, backfill
+└── .github/workflows/      CI, daily pipeline
 ```
 
 ## License

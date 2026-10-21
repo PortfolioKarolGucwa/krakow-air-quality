@@ -20,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: data-pipeline      # shared with the backfill workflow: never two writers at once
+  group: data-pipeline      # never two runs writing data at the same time
   cancel-in-progress: false
 
 jobs:
