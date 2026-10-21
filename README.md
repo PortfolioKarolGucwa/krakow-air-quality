@@ -1,7 +1,7 @@
 # Kraków air quality pipeline
 
-![CI](https://github.com/KarolGucwa/krakow-air-quality/actions/workflows/ci.yml/badge.svg)
-![Daily pipeline](https://github.com/KarolGucwa/krakow-air-quality/actions/workflows/daily_pipeline.yml/badge.svg)
+![CI](https://github.com/PortfolioKarolGucwa/krakow-air-quality/actions/workflows/ci.yml/badge.svg)
+![Daily pipeline](https://github.com/PortfolioKarolGucwa/krakow-air-quality/actions/workflows/daily_pipeline.yml/badge.svg)
 
 Kraków's winter smog is famous well beyond Poland, and in September 2019 the city banned
 burning coal and wood in homes. I wanted to check whether that ban actually
@@ -110,7 +110,7 @@ Running it against the live services turned up a few things the docs don't tell 
 ## Running it
 
 ```bash
-git clone https://github.com/KarolGucwa/krakow-air-quality && cd krakow-air-quality
+git clone https://github.com/PortfolioKarolGucwa/krakow-air-quality && cd krakow-air-quality
 python -m venv .venv && source .venv/bin/activate
 make install              # requirements + the `aq` CLI
 make deps                 # dbt packages (dbt_utils)
